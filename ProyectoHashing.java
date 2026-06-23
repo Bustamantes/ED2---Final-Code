@@ -1,3 +1,4 @@
+// Nada mejor que hacer
 import java.util.LinkedList;
 import java.util.Scanner;
 
