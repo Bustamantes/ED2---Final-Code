@@ -68,18 +68,22 @@ public class ProyectoHashing {
             }
         }
 
-        private int hashCuadradoMedio(int Valor) {
-            long cuadrado = (long) Valor * Valor;
-            String strCuadrado = String.valueOf(cuadrado);
-            int mid = strCuadrado.length() / 2;
-            int inicio = Math.max(0, mid - 1);
-            int fin = Math.min(strCuadrado.length(), mid + 1);
-            String medio = strCuadrado.substring(inicio, fin);
-            if(medio.isEmpty()) {
-                return 0;
-            }
-            return Integer.parseInt(medio) % tamano;
+    private int hashCuadradoMedio(int Valor) {
+        long cuadrado = (long) Valor * Valor;
+        String strCuadrado = String.valueOf(cuadrado);
+        int len = strCuadrado.length();
+        
+        // Calcular el inicio y fin correctos dependiendo de si la longitud es par o impar
+        int inicio = (len - 1) / 2; 
+        int fin = inicio + (len % 2 == 0 ? 2 : 1); 
+        
+        String medio = strCuadrado.substring(inicio, fin);
+        
+        if(medio.isEmpty()) {
+            return 0;
         }
+        return Integer.parseInt(medio) % tamano;
+    }
 
         public void insertar(int Valor) {
             long inicio = System.nanoTime();
