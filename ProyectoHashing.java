@@ -1,4 +1,3 @@
-// Nada mejor que hacer
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -48,7 +47,7 @@ public class ProyectoHashing {
                 iteraciones++;
                 if (iteraciones == tamano) break;
             }
-            System.out.println("No se encontró la Valor: " + Valor);
+            System.out.println("No se encontró el Valor: " + Valor);
         }
 
         public int getColisionesTotales() { return colisionesTotales; }
@@ -68,22 +67,22 @@ public class ProyectoHashing {
             }
         }
 
-    private int hashCuadradoMedio(int Valor) {
-        long cuadrado = (long) Valor * Valor;
-        String strCuadrado = String.valueOf(cuadrado);
-        int len = strCuadrado.length();
-        
-        // Calcular el inicio y fin correctos dependiendo de si la longitud es par o impar
-        int inicio = (len - 1) / 2; 
-        int fin = inicio + (len % 2 == 0 ? 2 : 1); 
-        
-        String medio = strCuadrado.substring(inicio, fin);
-        
-        if(medio.isEmpty()) {
-            return 0;
+        private int hashCuadradoMedio(int Valor) {
+            long cuadrado = (long) Valor * Valor;
+            String strCuadrado = String.valueOf(cuadrado);
+            int len = strCuadrado.length();
+            
+            // Calcular el inicio y fin correctos dependiendo de si la longitud es par o impar
+            int inicio = (len - 1) / 2; 
+            int fin = inicio + (len % 2 == 0 ? 2 : 1); 
+            
+            String medio = strCuadrado.substring(inicio, fin);
+            
+            if(medio.isEmpty()) {
+                return 0;
+            }
+            return Integer.parseInt(medio) % tamano;
         }
-        return Integer.parseInt(medio) % tamano;
-    }
 
         public void insertar(int Valor) {
             long inicio = System.nanoTime();
@@ -105,7 +104,7 @@ public class ProyectoHashing {
                 long fin = System.nanoTime();
                 System.out.println("Encontrado: " + Valor + " en lista del índice: " + indice + " | Tiempo(ns): " + (fin - inicio));
             } else {
-                System.out.println("No se encontró la Valor: " + Valor);
+                System.out.println("No se encontró el Valor: " + Valor);
             }
         }
 
@@ -123,27 +122,52 @@ public class ProyectoHashing {
 
         int opcion;
         do {
-            System.out.println("\n1. Insertar Valor");
-            System.out.println("2. Buscar Valor");
+            System.out.println("\n1. Insertar Valores");
+            System.out.println("2. Buscar Valores");
             System.out.println("3. Ver total de colisiones");
             System.out.println("4. Salir");
             System.out.print("Seleccione opción: ");
             opcion = sc.nextInt();
+            sc.nextLine(); // Limpiar el buffer del teclado después de leer el int
 
             if (opcion == 1) {
-                System.out.print("Ingrese la Valor a insertar: ");
-                int Valor = sc.nextInt();
-                System.out.println("\n--- Ejecución Hash Residuo ---");
-                tablaResiduo.insertar(Valor);
-                System.out.println("--- Ejecución Hash Cuadrado Medio ---");
-                tablaCuadradoMedio.insertar(Valor);
+                System.out.print("Ingrese los valores a insertar (separados por comas o espacios): ");
+                String entrada = sc.nextLine();
+                
+                // Dividir el string por comas o espacios
+                String[] valoresStr = entrada.split("[,\\s]+");
+                
+                for (String v : valoresStr) {
+                    if (v.trim().isEmpty()) continue; // Evitar procesar espacios vacíos
+                    try {
+                        int valor = Integer.parseInt(v.trim());
+                        System.out.println("\n--- Procesando inserción de: " + valor + " ---");
+                        System.out.println(" > Hash Residuo:");
+                        tablaResiduo.insertar(valor);
+                        System.out.println(" > Hash Cuadrado Medio:");
+                        tablaCuadradoMedio.insertar(valor);
+                    } catch (NumberFormatException e) {
+                        System.out.println("\n[!] '" + v + "' no es un número válido y será ignorado.");
+                    }
+                }
             } else if (opcion == 2) {
-                System.out.print("Ingrese la Valor a buscar: ");
-                int Valor = sc.nextInt();
-                System.out.println("\n--- Búsqueda Hash Residuo ---");
-                tablaResiduo.buscar(Valor);
-                System.out.println("--- Búsqueda Hash Cuadrado Medio ---");
-                tablaCuadradoMedio.buscar(Valor);
+                System.out.print("Ingrese los valores a buscar (separados por comas o espacios): ");
+                String entrada = sc.nextLine();
+                String[] valoresStr = entrada.split("[,\\s]+");
+                
+                for (String v : valoresStr) {
+                    if (v.trim().isEmpty()) continue;
+                    try {
+                        int valor = Integer.parseInt(v.trim());
+                        System.out.println("\n--- Procesando búsqueda de: " + valor + " ---");
+                        System.out.println(" > Hash Residuo:");
+                        tablaResiduo.buscar(valor);
+                        System.out.println(" > Hash Cuadrado Medio:");
+                        tablaCuadradoMedio.buscar(valor);
+                    } catch (NumberFormatException e) {
+                        System.out.println("\n[!] '" + v + "' no es un número válido y será ignorado.");
+                    }
+                }
             } else if (opcion == 3) {
                 System.out.println("Colisiones Hash Residuo: " + tablaResiduo.getColisionesTotales());
                 System.out.println("Colisiones Hash Cuadrado Medio: " + tablaCuadradoMedio.getColisionesTotales());
